@@ -121,29 +121,32 @@ async function addMakerOrder(
     nonce: (await web3.eth.getTransactionCount(account.address)).toString(),
   });
 
-  // Using a raw Tx to manually specify Gas Limits
-  const rawTx: FeeMarketEIP1559TxData = {
-    data: encodedParameters,
-    gasLimit: gasEstimate,
-    /// Total Max Fee that needs to be given (base + tip)
-    /// Refer https://docs.etherscan.io/api-endpoints/gas-tracker
-    /// for examples on how to use these
-    // maxFeePerGas: maxFeePerGas, // Can be set to manual variables or something that is imported from Etherescan
-    // maxPriorityFeePerGas: maxPriorityFeePerGas, // Can be set to manual variables or something that is imported from Etherescan
-    nonce: await web3.eth.getTransactionCount(account.address),
-    to: orderBook.options.address,
-    type: "0x02",
-  };
+  console.log(`Transaction Mined with Hash : ${receit.transactionHash}`);
+  /// Un-comment for a Raw Tx Approach using manual gas limits
 
-  const txObject = FeeMarketEIP1559Transaction.fromTxData(rawTx, {
-    common: common,
-  });
+  // // Using a raw Tx to manually specify Gas Limits
+  // const rawTx: FeeMarketEIP1559TxData = {
+  //   data: encodedParameters,
+  //   gasLimit: gasEstimate,
+  //   /// Total Max Fee that needs to be given (base + tip)
+  //   /// Refer https://docs.etherscan.io/api-endpoints/gas-tracker
+  //   /// for examples on how to use these
+  //   // maxFeePerGas: maxFeePerGas, // Can be set to manual variables or something that is imported from Etherescan
+  //   // maxPriorityFeePerGas: maxPriorityFeePerGas, // Can be set to manual variables or something that is imported from Etherescan
+  //   nonce: await web3.eth.getTransactionCount(account.address),
+  //   to: orderBook.options.address,
+  //   type: "0x02",
+  // };
 
-  const signedTx = txObject.sign(account.mnemonic);
+  // const txObject = FeeMarketEIP1559Transaction.fromTxData(rawTx, {
+  //   common: common,
+  // });
 
-  /// If the account in the web3 wallet matches the sign on the transaction that account will be used
-  // for sending the transaction
-  await web3.eth.sendSignedTransaction("0x" + signedTx.serialize().toString());
+  // const signedTx = txObject.sign(account.mnemonic);
+
+  // /// If the account in the web3 wallet matches the sign on the transaction that account will be used
+  // // for sending the transaction
+  // await web3.eth.sendSignedTransaction("0x" + signedTx.serialize().toString());
 }
 
 /// Alternalte Method to call transaction without making raw transactoins
